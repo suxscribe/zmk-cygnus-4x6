@@ -109,9 +109,9 @@
         raise_layer {
             bindings = <
 &trans    &trans   &trans   &trans  &trans   &trans     &trans     &trans    &trans    &trans        &trans        &trans
-&kp ESC   &kp F1   &kp F2   &kp F3  &kp F4   &kp F5     &kp PG_UP  &kp HOME  &kp UP    &kp END       &kp INS       &kp PSCR
+&kp ESC   &kp F1   &kp F2   &kp F3  &kp F4   &kp F5     &kp PG_UP  &kp HOME  &kp UP    &kp END       &kp INS       &kp PRINTSCREEN
 &kp CAPS  &kp F6   &kp F7   &kp F8  &kp F9   &kp F10    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT     &kp BSPC      &kp DEL
-&trans    &kp F11  &kp F12  &trans  &trans   &trans     &trans     &trans    &trans    &kp C_VOL_DN  &kp C_VOL_UP  &kp C_PLAY_PAUSE
+&trans    &kp F11  &kp F12  &trans  &trans   &trans     &trans     &trans    &trans    &kp C_VOLUME_DOWN  &kp C_VOL_UP  &kp C_PLAY_PAUSE
                             &trans  &mo SYS  &trans     &trans     &trans    &trans
             >;
         };
