@@ -5,12 +5,12 @@
 #define DEFAULT 0
 #define NUM 1
 #define SYM 2
-#define FUN 3
-#define NAV 4
+#define SYS 3
+#define EXTRA 4
 
 &lt {
     tapping-term-ms = <300>;
-    quick_tap_ms = <200>;
+    quick-tap-ms = <200>;
     flavor = "hold-preferred";
 };
 
@@ -90,8 +90,8 @@
 &kp GRAVE   &kp N1          &kp N2          &kp N3            &kp N4       &kp N5       &kp N6   &kp N7       &kp N8            &kp N9          &kp N0                  &kp BSPC
 &kp TAB     &kp Q           &kp W           &kp E             &kp R        &kp T        &kp Y    &kp U        &kp I              &kp O           &kp P                   &kp LBKT
 &kp ESC     &hm LGUI A      &hm LALT S      &hm LSHFT D       &hm LCTRL F  &kp G        &kp H    &hm RCTRL J  &hm RSHFT K        &hm LALT L      &hm RGUI SEMI           &kp SQT
-&kp LSHFT   &kp Z           &kp X           &kp C             &kp V        &kp B        &kp N    &kp M        &kp COMMA          &kp DOT         &kp FSLH                &kp RIGHT_SHIFT
-                                          &kp LCTRL          &mo NUM      &kp SPACE    &kp RET  &mo SYM      &mo NAV
+&kp LSHFT   &kp Z           &kp X           &kp C             &kp V        &kp B        &kp N    &kp M        &kp COMMA          &kp DOT         &kp FSLH                &kp RSHFT
+                                          &kp LCTRL          &mo NUM      &kp SPACE    &kp RET  &mo SYM      &mo EXTRA
             >;
         };
 
@@ -101,17 +101,17 @@
 &kp GRAVE   &kp N1      &kp N2      &kp N3      &kp N4      &kp N5      &kp N6      &kp N7      &kp N8      &kp N9      &kp N0      &trans
 &trans      &kp EXCL    &kp AT      &kp HASH    &kp DLLR    &kp PRCNT   &kp UNDER   &kp AMPS    &kp ASTRK   &kp LPAR    &kp RPAR   &kp PIPE
 &caps_word  &kp EQUAL   &kp MINUS   &kp PLUS    &kp LBRC    &kp RBRC    &kp LBKT    &kp RBKT    &kp SEMI  &kp COLON  &kp BSLH    &trans
-                            &trans  &trans      &trans      &trans      &mo FUN     &trans
+                            &trans  &trans      &trans      &trans      &mo SYS     &trans
             >;
         };
 
         raise_layer {
             bindings = <
 &trans        &trans  &trans  &trans  &trans  &trans  &trans    &trans    &trans    &trans            &trans        &trans
-&kp ESC       &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp PG_UP &kp HOME  &kp UP    &kp END           &kp INS       &kp PSCR
+&kp ESC       &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp PG_UP &kp HOME  &kp UP    &kp END           &kp INS       &kp PRINTSCREEN
 &kp CAPS      &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &kp PG_DN &kp LEFT  &kp DOWN  &kp RIGHT         &kp BSPC      &kp DEL
-&trans        &kp F11 &kp F12 &trans  &trans  &trans  &trans    &trans    &trans    &kp C_VOL_DN      &kp C_VOL_UP  &kp C_PLAY_PAUSE
-                                  &trans  &mo FUN  &trans     &trans     &trans     &trans
+&trans        &kp F11 &kp F12 &trans  &trans  &trans  &trans    &trans    &trans    &kp C_VOLUME_DOWN &kp C_VOL_UP  &kp C_PLAY_PAUSE
+                                  &trans  &mo SYS  &trans     &trans     &trans     &trans
             >;
         };
 
