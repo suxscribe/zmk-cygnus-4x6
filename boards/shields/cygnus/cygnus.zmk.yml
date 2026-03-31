@@ -10,3 +10,4 @@ features:
 siblings:
   - cygnus_left
   - cygnus_right
+  - cygnus_dongle
