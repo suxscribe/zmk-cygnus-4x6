@@ -1,1 +1,1 @@
-// Dongle has no physical keys; key events come from BLE peripherals.
+#include "cygnus.dtsi"
