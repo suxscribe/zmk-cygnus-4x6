@@ -24,3 +24,5 @@ include:
     shield: cygnus_right
   - board: nice_nano//zmk
     shield: cygnus_dongle
+  - board: nice_nano//zmk
+    shield: settings_reset
