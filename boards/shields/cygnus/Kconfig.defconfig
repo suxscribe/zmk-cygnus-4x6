@@ -15,6 +15,14 @@ config ZMK_BLE
 config ZMK_SPLIT
     default y
 
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
+	default y
+
+config ZMK_SPLIT_BATTERY_HID_REPORT
+	bool "Expose left/right peripheral battery levels via a custom USB HID report"
+	default y
+	depends on ZMK_USB && ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
+
 config ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS
     default 2  # left + right
 
