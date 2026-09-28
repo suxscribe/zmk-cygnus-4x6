@@ -8,11 +8,18 @@
  * peripheral battery events (which fire when
  * CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING is enabled) and
  * pushes a 2-byte input report to a second USB HID interface (HID_1)
- * every time a value changes.
+ * every time a value changes. The same two bytes are a feature report,
+ * so the host can read the cached levels with GET_REPORT without waiting
+ * for the next change.
  *
- * Report layout (Report ID 0x01):
- *     byte 0: left battery state of charge  (0..100, 0xFF = unknown)
- *     byte 1: right battery state of charge (0..100, 0xFF = unknown)
+ * Input report layout (Report ID 0x01, interrupt IN, ID included):
+ *     byte 0: report ID
+ *     byte 1: left battery state of charge  (0..100, 0xFF = unknown)
+ *     byte 2: right battery state of charge (0..100, 0xFF = unknown)
+ *
+ * Feature report payload omits the report ID. Windows keeps the ID in
+ * the first byte of the HidD_GetFeature buffer and places these two
+ * bytes after it.
  */
 
 #include <zephyr/kernel.h>
@@ -30,6 +37,10 @@ LOG_MODULE_REGISTER(zmk_split_battery, CONFIG_ZMK_LOG_LEVEL);
 #define REPORT_ID_BATTERY 0x01
 #define BATTERY_UNKNOWN   0xFF
 
+#define HID_GET_REPORT_TYPE_MASK 0xff00
+#define HID_GET_REPORT_ID_MASK   0x00ff
+#define HID_REPORT_TYPE_FEATURE  0x300
+
 static const uint8_t hid_report_desc[] = {
     0x06, 0x00, 0xFF, /* Usage Page (Vendor-Defined 0xFF00)             */
     0x09, 0x01,       /* Usage (0x01) - split battery device            */
@@ -43,6 +54,10 @@ static const uint8_t hid_report_desc[] = {
     0x81, 0x02,       /*   Input (Data, Variable, Absolute)             */
     0x09, 0x02,       /*   Usage (0x02) - right battery                 */
     0x81, 0x02,       /*   Input (Data, Variable, Absolute)             */
+    0x09, 0x01,       /*   Usage (0x01) - left battery                  */
+    0xB1, 0x02,       /*   Feature (Data, Variable, Absolute)           */
+    0x09, 0x02,       /*   Usage (0x02) - right battery                 */
+    0xB1, 0x02,       /*   Feature (Data, Variable, Absolute)           */
     0xC0,             /* End Collection                                 */
 };
 
@@ -56,8 +71,28 @@ static void int_in_ready_cb(const struct device *dev)
     k_sem_give(&report_sem);
 }
 
+static int get_report_cb(const struct device *dev, struct usb_setup_packet *setup, int32_t *len,
+                         uint8_t **data)
+{
+    static uint8_t feature_report[2];
+
+    ARG_UNUSED(dev);
+
+    if ((setup->wValue & HID_GET_REPORT_TYPE_MASK) != HID_REPORT_TYPE_FEATURE ||
+        (setup->wValue & HID_GET_REPORT_ID_MASK) != REPORT_ID_BATTERY) {
+        return -ENOTSUP;
+    }
+
+    feature_report[0] = levels[0];
+    feature_report[1] = levels[1];
+    *data = feature_report;
+    *len = sizeof(feature_report);
+    return 0;
+}
+
 static const struct hid_ops ops = {
     .int_in_ready = int_in_ready_cb,
+    .get_report = get_report_cb,
 };
 
 static int send_report(void)
