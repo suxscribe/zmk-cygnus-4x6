@@ -45,4 +45,9 @@ config ZMK_SPLIT_ROLE_CENTRAL
 config ZMK_BLE
 	default y
 
+config ZMK_SPLIT_BATTERY_IDLE_REPORT
+	bool "Sample peripheral battery while the half is idle"
+	default y
+	depends on ZMK_BATTERY_REPORTING && BT_BAS
+
 endif

@@ -17,9 +17,9 @@
  *     byte 1: left battery state of charge  (0..100, 0xFF = unknown)
  *     byte 2: right battery state of charge (0..100, 0xFF = unknown)
  *
- * Feature report payload omits the report ID. Windows keeps the ID in
- * the first byte of the HidD_GetFeature buffer and places these two
- * bytes after it.
+ * Feature report payload includes the report ID, same as the input
+ * report. Windows copies that payload onto the start of the
+ * HidD_GetFeature buffer.
  */
 
 #include <zephyr/kernel.h>
@@ -74,7 +74,7 @@ static void int_in_ready_cb(const struct device *dev)
 static int get_report_cb(const struct device *dev, struct usb_setup_packet *setup, int32_t *len,
                          uint8_t **data)
 {
-    static uint8_t feature_report[2];
+    static uint8_t feature_report[3];
 
     ARG_UNUSED(dev);
 
@@ -83,8 +83,9 @@ static int get_report_cb(const struct device *dev, struct usb_setup_packet *setu
         return -ENOTSUP;
     }
 
-    feature_report[0] = levels[0];
-    feature_report[1] = levels[1];
+    feature_report[0] = REPORT_ID_BATTERY;
+    feature_report[1] = levels[0];
+    feature_report[2] = levels[1];
     *data = feature_report;
     *len = sizeof(feature_report);
     return 0;
